@@ -127,6 +127,32 @@ departmentSchema.statics.getDepartments = function () {
     });
 };
 
+departmentSchema.statics.removeDepartment = async function (id) {
+    return new Promise(async (resolve, reject) => {
+        DepartmentDataSchema.findOne({_id: id}, function (err, department) {
+            if (err) {
+                return new Error(err)
+            } else {
+                if (department) {
+                    department.remove();
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            }
+        });
+    });
+};
+
+departmentSchema.statics.createDepartment = async function (data) {
+    return new Promise(async (resolve, reject) => {
+        const department = new mongoose.models.DepartmentDataSchema(data);
+        department.save();
+        resolve(true);
+    });
+};
+
+
 function generateDepartmentData(dep) {
     return {
         id: dep._id,
@@ -149,6 +175,30 @@ employeeSchema.statics.getEmployees = function () {
             }
             resolve(employees);
         });
+    });
+};
+
+employeeSchema.statics.removeEmployee = async function (id) {
+    return new Promise(async (resolve, reject) => {
+        EmployeeDataSchema.findOne({_id: id}, function (err, employee) {
+            if (err) {
+                return new Error(err)
+            } else {
+                if (employee) {
+                    employee.remove();
+                    resolve(true);
+                }
+            }
+            resolve(false);
+        });
+    });
+};
+
+employeeSchema.statics.createEmployee = async function (data) {
+    return new Promise(async (resolve, reject) => {
+        const employee = new mongoose.models.EmployeeDataSchema(data);
+        employee.save();
+        resolve(true);
     });
 };
 
