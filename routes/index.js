@@ -62,4 +62,14 @@ module.exports = function (app) {
             next(e)
         }
     });
+
+    app.post('/employee/department', async function (req, res, next) {
+        let status;
+        try {
+            status = await database.employees.setDepartment(req.body);
+            res.send({saved: status});
+        } catch (e) {
+            next(e)
+        }
+    });
 };

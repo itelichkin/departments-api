@@ -185,17 +185,40 @@ employeeSchema.statics.removeEmployee = async function (id) {
                 return new Error(err)
             } else {
                 if (employee) {
-                    employee.remove();
-                    resolve(true);
+                    employee.remove(function () {
+                        resolve(true);
+                    });
+                } else {
+                    resolve(false);
                 }
             }
-            resolve(false);
         });
     });
 };
 
 employeeSchema.statics.createEmployee = async function (data) {
     return new Promise(async (resolve, reject) => {
+        const employee = new mongoose.models.EmployeeDataSchema(data);
+        await employee.save();
+        resolve(true);
+    });
+};
+
+employeeSchema.statics.setDepartment = async function (data) {
+    return new Promise(async (resolve, reject) => {
+        EmployeeDataSchema.findOne({_id: data.id},  function (err, employee) {
+            if (err) {
+                return new Error(err)
+            } else {
+                if (employee) {
+                    employee.count = [data['departmentId']];
+                    employee.save();
+                    resolve(true);
+                }
+            }
+            resolve(false);
+        });
+
         const employee = new mongoose.models.EmployeeDataSchema(data);
         employee.save();
         resolve(true);
